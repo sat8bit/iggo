@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Gallery</title>
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-gap: 10px;
+            padding: 10px;
+        }
+        .grid-item {
+            width: 100%;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            cursor: pointer;
+        }
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+        #modalContent {
+            margin: auto;
+            display: block;
+            max-width: 700px;
+            max-height: 90vh;
+        }
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+        #myModal .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        #myModal .close:hover,
+        #myModal .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .pagination a {
+            color: #ccc;
+            margin: 0 10px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .pagination a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        {{range .Images}}
+        <div class="grid-item" onclick="openModal('{{.Path}}');">
+            <img src="{{.Path}}" alt="">
+        </div>
+        {{end}}
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal">
+        <span class="close">&times;</span>
+        <img id="modalContent">
+        <div id="caption"></div>
+    </div>
+
+    <!-- Pagination -->
+    {{if gt .Pages 1}}
+    <div class="pagination">
+        {{if gt .Page 1}}<a href="{{.PrevPath}}">Previous</a>{{end}}
+        {{if lt .Page .Pages}}<a href="{{.NextPath}}">Next</a>{{end}}
+    </div>
+    {{end}}
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("modalContent");
+
+        function openModal(imgPath) {
+            modal.style.display = "block";
+            modalImg.src = imgPath;
+        }
+
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() { 
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>
